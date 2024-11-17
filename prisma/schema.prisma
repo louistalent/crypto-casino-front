@@ -1,0 +1,161 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    email     String   @unique
+    username  String   @unique
+    firstName String
+    lastName  String
+    avatarUrl String?
+    status    String   @default("pending")
+    password  String
+    role      Roles?   @relation(name: "role", fields: [roleId], references: [slug])
+    roleId    String? @default("user")
+    parent_id String?
+    birthday String?
+    balance Float? @default(0)
+    currency String?
+    country String?
+    phoneNumber String?
+    address String?
+    city String?
+    state String?
+    ids String?
+    fidoAmount Float? @default(0)
+    timeZone String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Roles {
+    id    String @id @default(uuid())
+    name  String
+    slug  String @unique
+    users User[] @relation("role")
+}
+
+model Tokens {
+    token       String   @db.Text
+    user        Int   @unique
+    socketId    String?  @unique
+    type        String
+    expires     DateTime
+    blacklisted Boolean
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model ApolloGames {
+    gameId String @unique
+    name String?
+    img String?
+    device String?
+    title String?
+    categories String?
+    flash String?
+    status String?
+}
+
+model ApolloTransactions {
+    id              String   @id @default(uuid())
+    userId          String?
+    bet             String?
+    win             String?
+    tradeId         String?
+    betInfo         String?
+    gameId          String?
+    matrix          String?
+    date            String?
+    WinLines        String?
+    sessionId       String?
+    balance_before  String?
+    user_credit     String?
+    created_at      DateTime @default(now())
+}
+
+
+model ZeusGames {
+    orderId              String   @id @default(uuid())
+    id   String
+    gameId String
+    name String?
+    img String?
+    device String?
+    categories String?
+    title String?
+}
+    
+model ZeusGameTransactions {
+    id              String   @id @default(uuid())
+    userId          String?
+    bet             String?
+    win             String?
+    software         String?
+    gameId          String?
+    gameAct          String?
+    timestamp            String?
+    gameHand        String?
+    spinId       String?
+    diff  String?
+    user_credit     String?
+    before_credit     String?
+    after_credit     String?
+    created_at      DateTime @default(now())
+}
+
+model SportsBookTransactions {
+    id              Int @id @default(autoincrement())
+    token          String?
+    transactionId             String?
+    currency             String?
+    amount         Float
+    userid          Int
+    type          Int
+    requestId            String?
+    coefficient        Float
+    ip       String?
+    subPartnerId  String?
+    bonusId     String?
+    bonusTemplateId     String?
+    gameType     String?
+    disciplineId      String?
+    discipline      String?
+    tournamentId      String?
+    tournament      String?
+    tournamentRegionCode      String?
+    eventId      String?
+    event      String?
+    eventDate      String?
+    marketId      String?
+    market      String?
+    outcomeId      String?
+    outcome      String?
+    stage     Int 
+    resulttype      String?   
+    prevbalance   Float  
+    settled    String?  
+    gameid   String?  
+    providerid  String?  
+    transactiontime  String?  
+    created_at      DateTime @default(now())
+}
+
+model Categories {
+  id        Int    @id @default(autoincrement())
+  userName       String? @unique
+  sports         Int
+  sportsLie      Int
+  casino         Int
+  casinoLive     Int
+  virtual        Int
+  racing         Int
+  esports        Int
+  tournaments    Int
+}
